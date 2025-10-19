@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bastida per a la Descripció de Persones</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .word-bank-item {
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .word-bank-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        /* Estils pel popup (modal) */
+        .modal {
+            display: none; /* Amagat per defecte */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 2rem;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            animation: slideIn 0.3s;
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            line-height: 1;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+        @keyframes slideIn {
+            from {transform: translateY(-50px); opacity: 0;}
+            to {transform: translateY(0); opacity: 1;}
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6 md:p-10 space-y-8">
+
+        <!-- Títol i Objectiu -->
+        <header class="text-center border-b-2 border-blue-200 pb-6">
+            <h1 class="text-3xl md:text-4xl font-bold text-blue-700">BASTIDA PER A LA DESCRIPCIÓ DE PERSONES</h1>
+            <p class="mt-2 text-lg text-gray-600"><strong>Objectiu:</strong> Escriure un text breu que descrigui una persona.</p>
+        </header>
+
+        <!-- Camps d'informació -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label for="student-name" class="block text-md font-semibold text-gray-700">Nom de l'alumne/a:</label>
+                <input type="text" id="student-name" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div>
+                <label for="person-name" class="block text-md font-semibold text-gray-700">Persona que descriuré:</label>
+                <input type="text" id="person-name" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+        </div>
+
+        <!-- PAS 1: Trets Físics -->
+        <section class="p-6 bg-blue-50 rounded-xl border border-blue-200">
+            <h2 class="text-2xl font-bold text-blue-800 mb-4">PAS 1: BANC DE PARAULES (Trets Físics 👤)</h2>
+            <p class="mb-6 text-gray-600">Fes clic a sobre d'una paraula per saber què significa. Tria les que necessites del banc.</p>
+            <div id="physical-traits-bank" class="space-y-4">
+                <!-- Les categories s'injectaran aquí amb JS -->
+            </div>
+        </section>
+
+        <!-- PAS 2: Caràcter -->
+        <section class="p-6 bg-green-50 rounded-xl border border-green-200">
+            <h2 class="text-2xl font-bold text-green-800 mb-4">PAS 2: BANC DE PARAULES (Caràcter 😊)</h2>
+            <p class="mb-6 text-gray-600">Tria les paraules que descriuen la seva manera de ser.</p>
+            <div id="character-traits-bank" class="space-y-4">
+                <!-- Les categories s'injectaran aquí amb JS -->
+            </div>
+        </section>
+
+        <!-- PAS 3: Plantilla per escriure -->
+        <section class="p-6 bg-yellow-50 rounded-xl border border-yellow-200">
+            <h2 class="text-2xl font-bold text-yellow-800 mb-4">PAS 3: PLANTILLA PER ESCRIURE LA DESCRIPCIÓ ✍️</h2>
+            <p class="mb-6 text-gray-600">Omple els espais buits fent servir les paraules que has triat als bancs de paraules.</p>
+            <div class="space-y-4 p-4 bg-white rounded-lg border border-gray-200 text-lg">
+                <p><strong>Títol:</strong> Descripció de <span class="text-blue-600 font-semibold">[Escriu el nom de la persona]</span></p>
+                
+                <h3 class="font-bold text-gray-700 mt-4">Aspecte Físic (Com és?):</h3>
+                <p>És <span contenteditable="true" class="inline-block bg-gray-200 px-2 rounded-md min-w-[100px] focus:outline-none focus:ring-2 focus:ring-yellow-500">...</span>.</p>
+                <p>Té els cabells <span contenteditable="true" class="inline-block bg-gray-200 px-2 rounded-md min-w-[100px] focus:outline-none focus:ring-2 focus:ring-yellow-500">...</span>.</p>
+                <p>Té els ulls <span contenteditable="true" class="inline-block bg-gray-200 px-2 rounded-md min-w-[100px] focus:outline-none focus:ring-2 focus:ring-yellow-500">...</span>.</p>
+
+                <h3 class="font-bold text-gray-700 mt-4">Caràcter (Com és la seva personalitat?):</h3>
+                <p>És una persona <span contenteditable="true" class="inline-block bg-gray-200 px-2 rounded-md min-w-[100px] focus:outline-none focus:ring-2 focus:ring-yellow-500">...</span>.</p>
+                <p>També és <span contenteditable="true" class="inline-block bg-gray-200 px-2 rounded-md min-w-[100px] focus:outline-none focus:ring-2 focus:ring-yellow-500">...</span>.</p>
+                
+                <h3 class="font-bold text-gray-700 mt-4">Roba i Accessoris (Què porta?):</h3>
+                <p>Porta <span contenteditable="true" class="inline-block bg-gray-200 px-2 rounded-md min-w-[100px] focus:outline-none focus:ring-2 focus:ring-yellow-500">...</span> de color <span contenteditable="true" class="inline-block bg-gray-200 px-2 rounded-md min-w-[100px] focus:outline-none focus:ring-2 focus:ring-yellow-500">...</span>.</p>
+                <p>(Opcional) També porta <span contenteditable="true" class="inline-block bg-gray-200 px-2 rounded-md min-w-[100px] focus:outline-none focus:ring-2 focus:ring-yellow-500">...</span>.</p>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- El Popup / Modal -->
+    <div id="definition-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h3 id="modal-word" class="text-2xl font-bold mb-2 text-blue-700">Paraula</h3>
+            <p id="modal-definition" class="text-lg text-gray-700">Aquí anirà la definició.</p>
+        </div>
+    </div>
+
+    <script>
+        // Diccionari amb les definicions de les paraules
+        const definitions = {
+            'llargs': 'Que tenen molta longitud, que no són curts.',
+            'curts': 'Que tenen poca longitud, que no són llargs.',
+            'llisos': 'Cabells sense rínxols ni ondulacions.',
+            'arrissats': 'Cabells que tenen forma de rínxol o espiral.',
+            'rossos': 'Cabells de color groc clar, com el sol.',
+            'bruns': 'Cabells de color marró fosc.',
+            'negres': 'Del color més fosc que hi ha.',
+            'pèl-rojos': 'Cabells de color vermellós o taronja.',
+            'castanys': 'Cabells de color marró, com les castanyes.',
+            'blaus': 'Del color del cel quan fa bon dia.',
+            'verds': 'Del color de l\'herba o les fulles.',
+            'marrons': 'Del color de la terra o la xocolata.',
+            'grans': 'Que ocupen molt espai.',
+            'petits': 'Que ocupen poc espai.',
+            'rodona': 'Cara amb forma de cercle.',
+            'allargada': 'Cara més llarga que ampla.',
+            'ovalada': 'Cara amb forma d\'ou.',
+            'quadrada': 'Cara amb la mandíbula i el front amples, com un quadrat.',
+            'gros': 'Que té una mida gran.',
+            'petit': 'Que té una mida petita.',
+            'ample': 'Que és ample, que ocupa espai als costats.',
+            'punxegut': 'Nas que acaba en punta.',
+            'grossa': 'Que té una mida gran.',
+            'petita': 'Que té una mida petita.',
+            'llavis fins': 'Llavis que són prims, amb poc volum.',
+            'llavis grossos': 'Llavis que tenen molt de volum.',
+            'alt': 'Persona que té molta alçada.',
+            'baix': 'Persona que té poca alçada.',
+            'prim': 'Persona amb poc greix corporal.',
+            'gras': 'Persona amb més greix corporal del normal.',
+            'fort': 'Persona que té músculs i força.',
+            'samarreta': 'Peça de roba per a la part de dalt del cos, normalment de màniga curta.',
+            'jersei': 'Peça de roba de llana o fil per abrigar la part de dalt del cos.',
+            'pantalons': 'Peça de roba que cobreix les cames, des de la cintura fins als turmells.',
+            'texans': 'Tipus de pantalons fets de tela forta, normalment de color blau.',
+            'jaqueta': 'Peça de roba d\'abric que es posa sobre altres peces.',
+            'vambes': 'Sabates còmodes per fer esport o caminar.',
+            'sabates': 'Calçat que protegeix els peus.',
+            'vestit': 'Peça de roba d\'una sola peça que cobreix el cos i part de les cames.',
+            'faldilla': 'Peça de roba que penja de la cintura i cobreix les cames totalment o parcialment.',
+            'vermell': 'Color com el de les maduixes o el foc.',
+            'blau': 'Color com el del cel o el mar.',
+            'verd': 'Color com el de l\'herba o les fulles dels arbres.',
+            'groc': 'Color com el del sol o les llimones.',
+            'blanc': 'Color com el de la neu o la llet.',
+            'negre': 'El color més fosc, com la nit sense lluna.',
+            'gris': 'Color barreja de blanc i negre, com els núvols de pluja.',
+            'ulleres': 'Objecte amb vidres per veure-hi millor o protegir-se del sol.',
+            'arracades': 'Joia que es porta penjada a les orelles.',
+            'collaret': 'Joia que es porta al voltant del coll.',
+            'rellotge': 'Instrument per saber quina hora és.',
+            'pírcing': 'Joia que es posa en un forat fet a la pell.',
+            'bossa': 'Objecte per portar coses a dins.',
+            'alegre': 'Persona que quasi sempre està contenta i somriu.',
+            'content': 'Que sent alegria en un moment concret.',
+            'feliç': 'Que sent una alegria molt gran i duradora.',
+            'divertit': 'Persona que fa riure als altres.',
+            'simpàtic': 'Persona agradable i que cau bé als altres.',
+            'rialler': 'Persona que riu molt sovint.',
+            'tímid': 'Persona a qui li fa vergonya parlar amb gent nova.',
+            'reservat': 'Persona que no explica les seves coses personals.',
+            'seriós': 'Persona que no somriu gaire i sembla formal.',
+            'vergonyós': 'Que sent vergonya fàcilment.',
+            'intel·ligent': 'Persona que entén les coses amb facilitat i rapidesa.',
+            'llest': 'Sinònim d\'intel·ligent.',
+            'treballador': 'Persona a qui li agrada treballar i s\'esforça.',
+            'estudiós': 'Persona que dedica molt de temps a estudiar.',
+            'xerraire': 'Persona que parla molt.',
+            'enraonador': 'Sinònim de xerraire, que li agrada conversar.',
+            'amable': 'Persona que tracta bé els altres.',
+            'bon amic': 'Persona que ajuda i cuida els seus amics.',
+            'generós': 'Persona a qui li agrada compartir el que té.'
+        };
+        
+        // Dades dels bancs de paraules
+        const physicalTraitsData = [
+            { icon: '💇', category: 'Cabells', words: "llargs, curts, llisos, arrissats, rossos, bruns, negres, pèl-rojos, castanys" },
+            { icon: '👀', category: 'Ulls', words: "blaus, verds, marrons, negres, grans, petits" },
+            { icon: '😐', category: 'Cara', words: "rodona, allargada, ovalada, quadrada" },
+            { icon: '👃', category: 'Nas', words: "gros, petit, ample, punxegut" },
+            { icon: '👄', category: 'Boca / Llavis', words: "grossa, petita, llavis fins, llavis grossos" },
+            { icon: '📏', category: 'Cos / Alçada', words: "alt, baix, prim, gras, fort" },
+            { icon: '👕', category: 'Roba', words: "samarreta, jersei, pantalons, texans, jaqueta, vambes, sabates, vestit, faldilla" },
+            { icon: '🎨', category: 'Colors Roba', words: "vermell, blau, verd, groc, blanc, negre, gris" },
+            { icon: '👓', category: 'Accessoris', words: "ulleres, arracades, collaret, rellotge, pírcing, bossa" }
+        ];
+
+        const characterTraitsData = [
+            { icon: '😊/😄', category: 'Alegre', words: "alegre, content, feliç, divertit, simpàtic, rialler" },
+            { icon: '🤫/😳', category: 'Tímid', words: "tímid, reservat, seriós, vergonyós" },
+            { icon: '🧠/🤓', category: 'Llest', words: "intel·ligent, llest, treballador, estudiós" },
+            { icon: '🗣️/💬', category: 'Xerraire', words: "xerraire, enraonador" },
+            { icon: '🤝/🤗', category: 'Amable', words: "amable, bon amic, generós" }
+        ];
+
+        // Funció per crear i mostrar els bancs de paraules
+        function createWordBank(containerId, data, color) {
+            const container = document.getElementById(containerId);
+            data.forEach(item => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4';
+
+                const categoryLabel = document.createElement('div');
+                categoryLabel.className = 'w-full sm:w-1/4 md:w-1/5 flex-shrink-0 font-semibold text-gray-700 flex items-center gap-2';
+                categoryLabel.innerHTML = `<span class="text-2xl">${item.icon}</span> <span>${item.category}:</span>`;
+                
+                const wordsContainer = document.createElement('div');
+                wordsContainer.className = 'flex flex-wrap gap-2';
+                
+                item.words.split(', ').forEach(word => {
+                    const wordSpan = document.createElement('span');
+                    wordSpan.textContent = word;
+                    wordSpan.className = `word-bank-item bg-${color}-100 text-${color}-800 px-3 py-1 rounded-full text-sm font-medium hover:bg-${color}-200`;
+                    wordsContainer.appendChild(wordSpan);
+                });
+
+                categoryDiv.appendChild(categoryLabel);
+                categoryDiv.appendChild(wordsContainer);
+                container.appendChild(categoryDiv);
+            });
+        }
+        
+        // Crear els bancs de paraules al carregar la pàgina
+        document.addEventListener('DOMContentLoaded', () => {
+            createWordBank('physical-traits-bank', physicalTraitsData, 'blue');
+            createWordBank('character-traits-bank', characterTraitsData, 'green');
+        
+            // Lògica del Popup (Modal)
+            const modal = document.getElementById('definition-modal');
+            const modalWord = document.getElementById('modal-word');
+            const modalDefinition = document.getElementById('modal-definition');
+            const closeButton = document.querySelector('.close-button');
+
+            document.querySelectorAll('.word-bank-item').forEach(item => {
+                item.addEventListener('click', (event) => {
+                    const word = event.target.textContent.trim();
+                    const definition = definitions[word.toLowerCase()];
+                    if (definition) {
+                        modalWord.textContent = word.charAt(0).toUpperCase() + word.slice(1); // Posa la primera lletra en majúscula
+                        modalDefinition.textContent = definition;
+                        modal.style.display = 'block';
+                    }
+                });
+            });
+
+            // Tancar el modal
+            closeButton.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            // Tancar el modal fent clic fora del contingut
+            window.addEventListener('click', (event) => {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
